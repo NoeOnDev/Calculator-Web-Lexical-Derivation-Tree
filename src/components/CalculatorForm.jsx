@@ -14,17 +14,6 @@ function CalculatorForm() {
         }
     };
 
-    const setOperation = op => {
-        if (input) {
-            if (previousNumber && operator) {
-                evaluate();
-            }
-            setPreviousNumber(input);
-            setOperator(op);
-            setInput("");
-        }
-    };
-
     const add = () => {
         if (!error) {
             setOperation("+");
@@ -58,25 +47,46 @@ function CalculatorForm() {
         setError("");
     };
 
+    const setOperation = op => {
+        if (input) {
+            if (previousNumber && operator) {
+                if ((operator === '+' || operator === '-') && (op === '*' || op === '/')) {
+                    // Si el operador actual tiene mayor precedencia, apilar la operación actual
+                    stack.push({ number: parseFloat(input), operator: op });
+                } else {
+                    // Si no, evaluar la operación anterior y apilar el resultado
+                    evaluate();
+                    stack.push({ number: parseFloat(input), operator: op });
+                }
+            } else {
+                setPreviousNumber(input);
+                setOperator(op);
+            }
+            setInput("");
+        }
+    };
+
     const evaluate = () => {
-        setCurrentNumber(input);
         try {
-            let result;
-            switch (operator) {
-                case '+':
-                    result = parseFloat(previousNumber) + parseFloat(currentNumber);
-                    break;
-                case '-':
-                    result = parseFloat(previousNumber) - parseFloat(currentNumber);
-                    break;
-                case '*':
-                    result = parseFloat(previousNumber) * parseFloat(currentNumber);
-                    break;
-                case '/':
-                    result = parseFloat(previousNumber) / parseFloat(currentNumber);
-                    break;
-                default:
-                    break;
+            let result = parseFloat(previousNumber);
+            while (stack.length > 0) {
+                const { number, operator } = stack.shift();
+                switch (operator) {
+                    case '+':
+                        result += number;
+                        break;
+                    case '-':
+                        result -= number;
+                        break;
+                    case '*':
+                        result *= number;
+                        break;
+                    case '/':
+                        result /= number;
+                        break;
+                    default:
+                        break;
+                }
             }
             setInput(result.toString());
         } catch (err) {
