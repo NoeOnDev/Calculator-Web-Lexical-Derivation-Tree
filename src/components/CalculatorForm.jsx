@@ -10,53 +10,52 @@ function CalculatorForm() {
 
     const addToInput = val => {
         if (!error) {
-            setInput(prevInput => prevInput + val);
+            setInput(prevInput => prevInput === "0" && val !== "." ? val : prevInput + val);
         }
     };
 
-    const addDecimal = val => {
-        if (!error && input.indexOf(".") === -1) {
-            setInput(prevInput => prevInput + val);
+    const setOperation = op => {
+        if (input) {
+            if (previousNumber && operator) {
+                evaluate();
+            }
+            setPreviousNumber(input);
+            setOperator(op);
+            setInput("");
+        }
+    };
+
+    const add = () => {
+        if (!error) {
+            setOperation("+");
+        }
+    };
+
+    const subtract = () => {
+        if (!error) {
+            setOperation("-");
+        }
+    };
+
+    const multiply = () => {
+        if (!error) {
+            setOperation("*");
+        }
+    };
+
+    const divide = () => {
+        if (!error) {
+            if (input !== "0") {
+                setOperation("/");
+            } else {
+                setError("Error: División por cero");
+            }
         }
     };
 
     const clearInput = () => {
         setInput("");
         setError("");
-    };
-
-    const add = () => {
-        if (!error) {
-            setPreviousNumber(input);
-            setOperator("+");
-            setInput("");
-        }
-    };
-
-    const subtract = () => {
-        if (!error) {
-            setPreviousNumber(input);
-            setOperator("-");
-            setInput("");
-        }
-    };
-
-    const multiply = () => {
-        if (!error) {
-            setPreviousNumber(input);
-            setOperator("*");
-            setInput("");
-        }
-    };
-
-    const divide = () => {
-        if (!error && input !== "0") {
-            setPreviousNumber(input);
-            setOperator("/");
-            setInput("");
-        } else {
-            setError("Error: División por cero");
-        }
     };
 
     const evaluate = () => {
