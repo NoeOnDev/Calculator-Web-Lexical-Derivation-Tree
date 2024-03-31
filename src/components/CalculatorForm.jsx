@@ -36,38 +36,60 @@ function CalculatorForm() {
 
     const handleEqualClick = () => {
         let inputString = input;
-        let numbers = inputString.split(/\+|\-|\*|\//g);
-        let operators = inputString.replace(/[0-9]|\./g, "").split("");
+        let numbers = [];
+        let operators = [];
+        let currentNumber = "";
 
-        let divideIndex = operators.indexOf("/");
-        while (divideIndex !== -1) {
-            numbers.splice(divideIndex, 2, numbers[divideIndex] / numbers[divideIndex + 1]);
-            operators.splice(divideIndex, 1);
-            divideIndex = operators.indexOf("/");
+        // Parse input into numbers and operators, respecting parentheses
+        for (let i = 0; i < inputString.length; i++) {
+            if ("+-*/()".includes(inputString[i])) {
+                if (currentNumber !== "") {
+                    numbers.push(parseFloat(currentNumber));
+                    currentNumber = "";
+                }
+                if (inputString[i] !== ")") {
+                    operators.push(inputString[i]);
+                } else {
+                    // Calculate within parentheses
+                    let num2 = numbers.pop();
+                    let num1 = numbers.pop();
+                    let op = operators.pop();
+                    let result;
+                    if (op === "+") {
+                        result = num1 + num2;
+                    } else if (op === "-") {
+                        result = num1 - num2;
+                    } else if (op === "*") {
+                        result = num1 * num2;
+                    } else if (op === "/") {
+                        result = num1 / num2;
+                    }
+                    numbers.push(result);
+                }
+            } else {
+                currentNumber += inputString[i];
+            }
         }
 
-        let multiplyIndex = operators.indexOf("*");
-        while (multiplyIndex !== -1) {
-            numbers.splice(multiplyIndex, 2, numbers[multiplyIndex] * numbers[multiplyIndex + 1]);
-            operators.splice(multiplyIndex, 1);
-            multiplyIndex = operators.indexOf("*");
+        if (currentNumber !== "") {
+            numbers.push(parseFloat(currentNumber));
         }
 
-        let subtractIndex = operators.indexOf("-");
-        while (subtractIndex !== -1) {
-            numbers.splice(subtractIndex, 2, numbers[subtractIndex] - numbers[subtractIndex + 1]);
-            operators.splice(subtractIndex, 1);
-            subtractIndex = operators.indexOf("-");
+        // Calculate remaining expression
+        let result = numbers[0];
+        for (let i = 0; i < operators.length; i++) {
+            if (operators[i] === "+") {
+                result += numbers[i + 1];
+            } else if (operators[i] === "-") {
+                result -= numbers[i + 1];
+            } else if (operators[i] === "*") {
+                result *= numbers[i + 1];
+            } else if (operators[i] === "/") {
+                result /= numbers[i + 1];
+            }
         }
 
-        let addIndex = operators.indexOf("+");
-        while (addIndex !== -1) {
-            numbers.splice(addIndex, 2, parseFloat(numbers[addIndex]) + parseFloat(numbers[addIndex + 1]));
-            operators.splice(addIndex, 1);
-            addIndex = operators.indexOf("+");
-        }
-
-        setInput(numbers[0].toString());
+        setInput(result.toString());
         setResultDisplayed(true);
     };
 
@@ -108,8 +130,8 @@ function CalculatorForm() {
                     <div className={style.numbers}>
                         <div onClick={handleNumberClick}>0</div>
                         <div onClick={handleNumberClick}>.</div>
-                        <div>(</div>
-                        <div>)</div>
+                        <div onClick={() => setInput(input + '(')}>(</div>
+                        <div onClick={() => setInput(input + ')')}>)</div>
                     </div>
                 </div>
                 
