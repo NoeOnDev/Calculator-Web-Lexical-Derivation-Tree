@@ -34,46 +34,98 @@ function CalculatorForm() {
         }
     };
 
+    const handleParenthesisClick = (parenthesis) => {
+        setInput(input + parenthesis);
+    };
+
     const handleEqualClick = () => {
-        let inputString = input;
-        let numbers = inputString.split(/\+|\-|\*|\//g);
-        let operators = inputString.replace(/[0-9]|\./g, "").split("");
-
-        let divideIndex = operators.indexOf("/");
-        while (divideIndex !== -1) {
-            numbers.splice(divideIndex, 2, numbers[divideIndex] / numbers[divideIndex + 1]);
-            operators.splice(divideIndex, 1);
-            divideIndex = operators.indexOf("/");
+        let result;
+        try {
+            result = evaluateExpression(input);
+        } catch (error) {
+            result = "Error";
+            console.error("Error evaluating expression:", error);
         }
-
-        let multiplyIndex = operators.indexOf("*");
-        while (multiplyIndex !== -1) {
-            numbers.splice(multiplyIndex, 2, numbers[multiplyIndex] * numbers[multiplyIndex + 1]);
-            operators.splice(multiplyIndex, 1);
-            multiplyIndex = operators.indexOf("*");
-        }
-
-        let subtractIndex = operators.indexOf("-");
-        while (subtractIndex !== -1) {
-            numbers.splice(subtractIndex, 2, numbers[subtractIndex] - numbers[subtractIndex + 1]);
-            operators.splice(subtractIndex, 1);
-            subtractIndex = operators.indexOf("-");
-        }
-
-        let addIndex = operators.indexOf("+");
-        while (addIndex !== -1) {
-            numbers.splice(addIndex, 2, parseFloat(numbers[addIndex]) + parseFloat(numbers[addIndex + 1]));
-            operators.splice(addIndex, 1);
-            addIndex = operators.indexOf("+");
-        }
-
-        setInput(numbers[0].toString());
+        setInput(result.toString());
         setResultDisplayed(true);
     };
 
     const handleClearClick = () => {
         setInput("");
     };
+
+    function tokenize(inputString) {
+        return inputString.split(/(\+|\-|\*|\/|\(|\))/).map(token => token.trim());
+    }
+
+    function parse(tokens) {
+        let currentNode = { type: 'expression', value: '' };
+        let rootNode = currentNode;
+        let stack = [];
+
+        for (let i = 0; i < tokens.length; i++) {
+            let token = tokens[i];
+
+            if (token === '+' || token === '-' || token === '*' || token === '/') {
+                currentNode.operator = token;
+                currentNode.right = { type: 'expression', value: '' };
+                currentNode = currentNode.right;
+            } else if (token === '(') {
+                stack.push(currentNode);
+                currentNode = { type: 'expression', value: '' };
+            } else if (token === ')') {
+                let topNode = stack.pop();
+                topNode.right = currentNode;
+                currentNode = topNode;
+            } else {
+                currentNode.value = token;
+
+                if (currentNode.parent && currentNode.parent.right) {
+                    currentNode = currentNode.parent.right;
+                } else if (i < tokens.length - 1) {
+                    currentNode.parent = { left: rootNode, operator: currentNode.operator };
+                    currentNode = currentNode.parent;
+                    rootNode = currentNode;
+                }
+            }
+        }
+
+        return rootNode;
+    }
+
+    function evaluate(node) {
+        if (!node) return 0;
+
+        if (!node.left && !node.right) {
+            return parseFloat(node.value);
+        }
+
+        let leftValue = evaluate(node.left);
+        let rightValue = evaluate(node.right);
+
+        switch (node.operator) {
+            case '+':
+                return leftValue + rightValue;
+            case '-':
+                return leftValue - rightValue;
+            case '*':
+                return leftValue * rightValue;
+            case '/':
+                if (rightValue === 0) {
+                    throw new Error("Division by zero");
+                }
+                return leftValue / rightValue;
+            default:
+                return 0;
+        }
+    }
+
+    function evaluateExpression(inputString) {
+        let tokens = tokenize(inputString);
+        let rootNode = parse(tokens);
+        let result = evaluate(rootNode);
+        return result;
+    }
 
     return (
         <div className={style.calculator}>
@@ -95,19 +147,22 @@ function CalculatorForm() {
                         <div onClick={handleNumberClick}>4</div>
                         <div onClick={handleNumberClick}>5</div>
                         <div onClick={handleNumberClick}>6</div>
+                        <div className={style.equal} id="result" onClick={handleEqualClick}>=</div>
                     </div>
                     <div className={style.numbers}>
                         <div onClick={handleNumberClick}>1</div>
                         <div onClick={handleNumberClick}>2</div>
                         <div onClick={handleNumberClick}>3</div>
+                        <div className={style.clear} id="clear" onClick={handleClearClick}>C</div>
                     </div>
                     <div className={style.numbers}>
                         <div onClick={handleNumberClick}>0</div>
                         <div onClick={handleNumberClick}>.</div>
-                        <div id="clear" onClick={handleClearClick}>C</div>
+                        <div onClick={() => handleParenthesisClick('(')}>(</div>
+                        <div onClick={() => handleParenthesisClick(')')}>)</div>
                     </div>
                 </div>
-                <div className={style.equal} id="result" onClick={handleEqualClick}>=</div>
+                
             </div>
         </div>
     );
