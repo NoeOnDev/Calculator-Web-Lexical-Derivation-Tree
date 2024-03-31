@@ -91,6 +91,7 @@ function CalculatorForm() {
                         <div onClick={handleNumberClick}>7</div>
                         <div onClick={handleNumberClick}>8</div>
                         <div onClick={handleNumberClick}>9</div>
+                        <div className={style.delete}>DEL</div>
                     </div>
                     <div className={style.numbers}>
                         <div onClick={handleNumberClick}>4</div>
