@@ -4,9 +4,6 @@ body {
     font-family: 'Source Sans Pro', sans-serif;
     letter-spacing: 5px;
     font-size: 1.8rem;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
   }
   
   .calculator {
@@ -34,10 +31,6 @@ body {
     -webkit-box-shadow: inset 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
     box-shadow: inset 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
   }
-  
-  .buttons {}
-  
-  .operators {}
   
   .operators div {
     display: inline-block;
