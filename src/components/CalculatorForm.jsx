@@ -1,13 +1,13 @@
-import React, {useState} from "react";
+import React, { useState, useCallback } from "react";
 import style from "../styles/calculatorStyle.module.css";
 
 function CalculatorForm() {
     const [input, setInput] = useState("");
     const [resultDisplayed, setResultDisplayed] = useState(false);
-
-    const handleNumberClick = (e) => {
-        setInput(input + e.target.textContent);
-    };
+    
+    const handleNumberClick = useCallback((e) => {
+        setInput(input => input + e.target.textContent);
+    }, []);
 
     const handleOperatorClick = (e) => {
         setInput(input + e.target.textContent);
@@ -87,7 +87,7 @@ function CalculatorForm() {
                 if (operatorStack.length === 0) {
                     throw new Error('Unmatched parentheses');
                 }
-                operatorStack.pop(); // Pop '('
+                operatorStack.pop();
             } else {
                 while (operatorStack.length > 0 && precedence[operatorStack[operatorStack.length - 1]] >= precedence[token]) {
                     outputQueue.push(operatorStack.pop());
