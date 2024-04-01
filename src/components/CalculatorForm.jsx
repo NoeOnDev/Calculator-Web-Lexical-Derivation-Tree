@@ -40,7 +40,6 @@ function CalculatorForm() {
         let operators = [];
         let currentNumber = "";
 
-        // Parse input into numbers and operators, respecting parentheses
         for (let i = 0; i < inputString.length; i++) {
             if ("+-*/()".includes(inputString[i])) {
                 if (currentNumber !== "") {
@@ -50,7 +49,6 @@ function CalculatorForm() {
                 if (inputString[i] !== ")") {
                     operators.push(inputString[i]);
                 } else {
-                    // Calculate within parentheses
                     let num2 = numbers.pop();
                     let num1 = numbers.pop();
                     let op = operators.pop();
