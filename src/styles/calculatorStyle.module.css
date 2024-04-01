@@ -13,11 +13,11 @@ body {
     padding: 20px;
     -webkit-box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
     box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+    border-radius: 40px;
+    background-color: #616161;
   }
   
   .input {
-    border: 1px solid #ddd;
     border-radius: 1px;
     height: 60px;
     padding-right: 15px;
@@ -26,24 +26,20 @@ body {
     font-size: 2.5rem;
     overflow-x: auto;
     transition: all .2s ease-in-out;
-  }
-  
-  .input:hover {
-    border: 1px solid #bbb;
-    -webkit-box-shadow: inset 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
-    box-shadow: inset 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
+    background-color: #9CCC65;
+    border-radius: 20px;
   }
   
   .operators div {
     display: inline-block;
-    border: 1px solid #bbb;
-    border-radius: 1px;
-    width: 80px;
+    border-radius: 10px;
+    border: none;
+    width: 82px;
     text-align: center;
     padding: 10px;
-    margin: 20px 4px 10px 0;
+    margin: 20px 4px 5px 0;
     cursor: pointer;
-    background-color: #ddd;
+    background-color: #BDBDBD;
     transition: border-color .2s ease-in-out, background-color .2s, box-shadow .2s;
   }
   
@@ -64,14 +60,14 @@ body {
   
   .numbers div {
     display: inline-block;
-    border: 1px solid #ddd;
-    border-radius: 1px;
+    border-radius: 10px;
+    border: none;
     width: 80px;
     text-align: center;
     padding: 10px;
-    margin: 4px 4px 4px 0;
+    margin: 4px 6px 4px 0;
     cursor: pointer;
-    background-color: #f9f9f9;
+    background-color: #E0E0E0;
     transition: border-color .2s ease-in-out, background-color .2s, box-shadow .2s;
   }
   
@@ -88,10 +84,12 @@ body {
   
   div.equal {
     display: inline-block;
-    border: 1px solid #3079ED;
-    border-radius: 1px;
+    width: 80px;
+    border-radius: 10px;
+    padding: 10px;
     text-align: center;
     cursor: pointer;
+    border: none;
     color: #FFF;
     background-color: #4d90fe;
     transition: all .2s ease-in-out;
@@ -101,7 +99,6 @@ body {
     background-color: #307CF9;
     -webkit-box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
     box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
-    border-color: #1857BB;
   }
   
   div.equal:active {
@@ -110,8 +107,9 @@ body {
 
   div.clear {
     display: inline-block;
-    border: 1px solid #2c2c2c;
-    border-radius: 1px;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
     text-align: center;
     cursor: pointer;
     color: #FFF;
@@ -123,7 +121,6 @@ body {
         background-color: #4d4f52;
         -webkit-box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
         box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
-        border-color: #303030;
     }
 
     div.clear:active {
@@ -131,21 +128,20 @@ body {
     }
 
     div.delete {
-      display: inline-block;
-      border: 1px solid #ff0000;
-      border-radius: 1px;
+      border-radius: 10px;
       text-align: center;
       cursor: pointer;
+      padding: 10px;
       color: #FFF;
-      background-color: #ee1f1f;
+      background-color: #FF5252;
       transition: all .2s ease-in-out;
+      border: none;
     }
   
       div.delete:hover {
           background-color: #bb0000;
           -webkit-box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
           box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
-          border-color: #ff0000;
       }
   
       div.delete:active {
