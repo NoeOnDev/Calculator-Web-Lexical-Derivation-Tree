@@ -34,59 +34,16 @@ function CalculatorForm() {
         }
     };
 
+    const evaluateExpression = (expression) => {
+        try {
+            return eval(expression);
+        } catch (error) {
+            return 'Error';
+        }
+    };
+
     const handleEqualClick = () => {
-        let inputString = input;
-        let numbers = [];
-        let operators = [];
-        let currentNumber = "";
-
-        for (let i = 0; i < inputString.length; i++) {
-            if ("+-*/()".includes(inputString[i])) {
-                if (currentNumber !== "") {
-                    numbers.push(parseFloat(currentNumber));
-                    currentNumber = "";
-                }
-                if (inputString[i] !== ")") {
-                    operators.push(inputString[i]);
-                } else {
-                    let num2 = numbers.pop();
-                    let num1 = numbers.pop();
-                    let op = operators.pop();
-                    let result;
-                    if (op === "+") {
-                        result = num1 + num2;
-                    } else if (op === "-") {
-                        result = num1 - num2;
-                    } else if (op === "*") {
-                        result = num1 * num2;
-                    } else if (op === "/") {
-                        result = num1 / num2;
-                    }
-                    numbers.push(result);
-                }
-            } else {
-                currentNumber += inputString[i];
-            }
-        }
-
-        if (currentNumber !== "") {
-            numbers.push(parseFloat(currentNumber));
-        }
-
-        // Calculate remaining expression
-        let result = numbers[0];
-        for (let i = 0; i < operators.length; i++) {
-            if (operators[i] === "+") {
-                result += numbers[i + 1];
-            } else if (operators[i] === "-") {
-                result -= numbers[i + 1];
-            } else if (operators[i] === "*") {
-                result *= numbers[i + 1];
-            } else if (operators[i] === "/") {
-                result /= numbers[i + 1];
-            }
-        }
-
+        const result = evaluateExpression(input);
         setInput(result.toString());
         setResultDisplayed(true);
     };
