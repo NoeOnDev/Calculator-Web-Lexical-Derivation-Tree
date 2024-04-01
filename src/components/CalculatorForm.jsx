@@ -19,7 +19,7 @@ function CalculatorForm() {
             setInput(result.toString());
             setResultDisplayed(true);
         } catch (error) {
-            setInput('Error');
+            setInput('Error: ' + error.message);
         }
     };
 
@@ -32,15 +32,27 @@ function CalculatorForm() {
     };
 
     const evaluateExpression = (expression) => {
+        expression = expression.replace(/\s+/g, '');
         const tokens = tokenize(expression);
         const result = evaluate(tokens);
         return result;
     };
-
+    
     const tokenize = (expression) => {
         const regex = /([-+*/()])/;
         let tokens = expression.split(regex).filter(token => token.trim() !== '');
+        tokens = handleNegativeNumbers(tokens);
         tokens = insertMultiplicationBeforeParentheses(tokens);
+        return tokens;
+    };
+    
+    const handleNegativeNumbers = (tokens) => {
+        for (let i = 0; i < tokens.length; i++) {
+            if (tokens[i] === '-' && (i === 0 || tokens[i - 1] === '(')) {
+                tokens[i] = '-' + tokens[i + 1];
+                tokens.splice(i + 1, 1);
+            }
+        }
         return tokens;
     };
     
