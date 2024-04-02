@@ -10,7 +10,12 @@ function CalculatorForm() {
     }, []);
 
     const handleOperatorClick = (e) => {
-        setInput(input + e.target.textContent);
+        const lastChar = input[input.length - 1];
+        if (lastChar === '+' || lastChar === '-' || lastChar === '*' || lastChar === '/') {
+            setInput(input.slice(0, -1) + e.target.textContent);
+        } else {
+            setInput(input + e.target.textContent);
+        }
     };
 
     const handleEqualClick = () => {
