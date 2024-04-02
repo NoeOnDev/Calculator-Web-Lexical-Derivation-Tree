@@ -89,26 +89,6 @@ const tokenize = useCallback((expression) => {
         return detailedTokens;
     }, []);
 
-
-    const handleNegativeNumbers = useCallback((tokens) => {
-        for (let i = 0; i < tokens.length; i++) {
-            if (tokens[i] === '-' && (i === 0 || tokens[i - 1] === '(')) {
-                tokens[i] = '-' + tokens[i + 1];
-                tokens.splice(i + 1, 1);
-            }
-        }
-        return tokens;
-    }, []);
-
-    const insertMultiplicationBeforeParentheses = useCallback((tokens) => {
-        for (let i = 0; i < tokens.length - 1; i++) {
-            if (!isNaN(tokens[i]) && tokens[i + 1] === '(') {
-                tokens.splice(i + 1, 0, '*');
-            }
-        }
-        return tokens;
-    }, []);
-
     const evaluate = useCallback((detailedTokens) => {
         const outputQueue = [];
         const operatorStack = [];
