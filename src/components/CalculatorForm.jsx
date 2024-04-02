@@ -50,21 +50,25 @@ function CalculatorForm() {
         return result;
     }, []);
 
-    const tokenize = useCallback((expression) => {
-        const regex = /([-+*/()])/;
-        let tokens = expression.split(regex).filter(token => token.trim() !== '');
-    
-        for (let i = 0; i < tokens.length - 1; i++) {
-            if (!isNaN(tokens[i]) && tokens[i + 1] === '(') {
-                tokens.splice(i + 1, 0, '*');
-            }
-            if (tokens[i] === ')' && !isNaN(tokens[i + 1])) {
-                tokens.splice(i + 1, 0, '*');
-            }
-            if (tokens[i] === ')' && tokens[i + 1] === '(') {
-                tokens.splice(i + 1, 0, '*');
-            }
+const tokenize = useCallback((expression) => {
+    const regex = /([-+*/()])/;
+    let tokens = expression.split(regex).filter(token => token.trim() !== '');
+
+    for (let i = 0; i < tokens.length - 1; i++) {
+        if (tokens[i] === '-' && (i === 0 || tokens[i - 1] === '(' || ['+', '-', '*', '/'].includes(tokens[i - 1]))) {
+            tokens[i] += tokens[i + 1];
+            tokens.splice(i + 1, 1);
         }
+        if (!isNaN(tokens[i]) && tokens[i + 1] === '(') {
+            tokens.splice(i + 1, 0, '*');
+        }
+        if (tokens[i] === ')' && !isNaN(tokens[i + 1])) {
+            tokens.splice(i + 1, 0, '*');
+        }
+        if (tokens[i] === ')' && tokens[i + 1] === '(') {
+            tokens.splice(i + 1, 0, '*');
+        }
+    }
     
         const detailedTokens = [];
     
