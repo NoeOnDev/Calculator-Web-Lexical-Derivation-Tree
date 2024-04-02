@@ -167,7 +167,7 @@ function CalculatorForm() {
     }, []);
 
     return (
-        <div>
+        <div className={style.container}>
             <div className={style.calculator}>
                 <div className={style.input} id="input">{input}</div>
                 <div className={style.buttons}>
@@ -206,6 +206,7 @@ function CalculatorForm() {
                 </div>
             </div>
             <div className={style.tokens} id="tokens">
+                <h1>Analizador Léxico</h1>
                 {tokens.map((token, index) => (
                     <div key={index}>
                         Linea 1 - Data type: {token.type}, Value: "{token.value}", Position: {token.position}

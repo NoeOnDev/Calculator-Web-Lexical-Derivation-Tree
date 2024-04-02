@@ -8,6 +8,24 @@ body {
   font-size: 1.8rem;
 }
 
+.container {
+  display: flex;
+  gap: 50px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.tokens {
+  font-size: 1.2rem;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  display: flex;
+  gap: 10px;
+}
+
 .calculator {
   width: 424px;
   padding: 20px;
