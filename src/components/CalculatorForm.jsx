@@ -4,54 +4,54 @@ import style from "../styles/calculatorStyle.module.css";
 function CalculatorForm() {
     const [input, setInput] = useState("");
     const [resultDisplayed, setResultDisplayed] = useState(false);
+    const [error, setError] = useState(null);
 
     const handleNumberClick = useCallback((e) => {
         setInput(input => input + e.target.textContent);
     }, []);
 
-    const handleOperatorClick = (e) => {
+    const handleOperatorClick = useCallback((e) => {
         const lastChar = input[input.length - 1];
-        if (lastChar === '+' || lastChar === '-' || lastChar === '*' || lastChar === '/') {
-            setInput(input.slice(0, -1) + e.target.textContent);
-        } else {
-            setInput(input + e.target.textContent);
-        }
-    };
+        setInput(input => (lastChar === '+' || lastChar === '-' || lastChar === '*' || lastChar === '/') ? input.slice(0, -1) + e.target.textContent : input + e.target.textContent);
+    }, [input]);
 
-    const handleEqualClick = () => {
+    const handleEqualClick = useCallback(() => {
         try {
             const result = evaluateExpression(input);
             setInput(result.toString());
             setResultDisplayed(true);
+            setError(null);
         } catch (error) {
             setInput('Error: ' + error.message);
+            setError(error.message);
         }
-    };
+    }, [input]);
 
-    const handleDeleteClick = () => {
+    const handleDeleteClick = useCallback(() => {
         setInput(input.slice(0, -1));
-    };
+    }, [input]);
 
-    const handleClearClick = () => {
+    const handleClearClick = useCallback(() => {
         setInput("");
-    };
+        setError(null);
+    }, []);
 
-    const evaluateExpression = (expression) => {
+    const evaluateExpression = useCallback((expression) => {
         expression = expression.replace(/\s+/g, '');
         const tokens = tokenize(expression);
         const result = evaluate(tokens);
         return result;
-    };
+    }, []);
 
-    const tokenize = (expression) => {
+    const tokenize = useCallback((expression) => {
         const regex = /([-+*/()])/;
         let tokens = expression.split(regex).filter(token => token.trim() !== '');
         tokens = handleNegativeNumbers(tokens);
         tokens = insertMultiplicationBeforeParentheses(tokens);
         return tokens;
-    };
+    }, []);
 
-    const handleNegativeNumbers = (tokens) => {
+    const handleNegativeNumbers = useCallback((tokens) => {
         for (let i = 0; i < tokens.length; i++) {
             if (tokens[i] === '-' && (i === 0 || tokens[i - 1] === '(')) {
                 tokens[i] = '-' + tokens[i + 1];
@@ -59,18 +59,18 @@ function CalculatorForm() {
             }
         }
         return tokens;
-    };
+    }, []);
 
-    const insertMultiplicationBeforeParentheses = (tokens) => {
+    const insertMultiplicationBeforeParentheses = useCallback((tokens) => {
         for (let i = 0; i < tokens.length - 1; i++) {
             if (!isNaN(tokens[i]) && tokens[i + 1] === '(') {
                 tokens.splice(i + 1, 0, '*');
             }
         }
         return tokens;
-    };
+    }, []);
 
-    const evaluate = (tokens) => {
+    const evaluate = useCallback((tokens) => {
         const outputQueue = [];
         const operatorStack = [];
         const precedence = {
@@ -136,7 +136,7 @@ function CalculatorForm() {
         }
 
         return stack[0];
-    };
+    }, []);
 
     return (
         <div className={style.calculator}>

@@ -57,6 +57,15 @@ body {
   .leftPanel {
     display: inline-block;
   }
+
+.numbers div,
+.operators div,
+.equal,
+.clear,
+.delete {
+    user-select: none;
+}
+
   
   .numbers div {
     display: inline-block;
