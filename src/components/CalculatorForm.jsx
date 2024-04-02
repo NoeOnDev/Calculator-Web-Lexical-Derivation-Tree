@@ -4,7 +4,7 @@ import style from "../styles/calculatorStyle.module.css";
 function CalculatorForm() {
     const [input, setInput] = useState("");
     const [resultDisplayed, setResultDisplayed] = useState(false);
-    
+
     const handleNumberClick = useCallback((e) => {
         setInput(input => input + e.target.textContent);
     }, []);
@@ -42,7 +42,7 @@ function CalculatorForm() {
         const result = evaluate(tokens);
         return result;
     };
-    
+
     const tokenize = (expression) => {
         const regex = /([-+*/()])/;
         let tokens = expression.split(regex).filter(token => token.trim() !== '');
@@ -50,7 +50,7 @@ function CalculatorForm() {
         tokens = insertMultiplicationBeforeParentheses(tokens);
         return tokens;
     };
-    
+
     const handleNegativeNumbers = (tokens) => {
         for (let i = 0; i < tokens.length; i++) {
             if (tokens[i] === '-' && (i === 0 || tokens[i - 1] === '(')) {
@@ -60,7 +60,7 @@ function CalculatorForm() {
         }
         return tokens;
     };
-    
+
     const insertMultiplicationBeforeParentheses = (tokens) => {
         for (let i = 0; i < tokens.length - 1; i++) {
             if (!isNaN(tokens[i]) && tokens[i + 1] === '(') {
@@ -174,7 +174,7 @@ function CalculatorForm() {
                         <div onClick={() => setInput(input + ')')}>)</div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     );
