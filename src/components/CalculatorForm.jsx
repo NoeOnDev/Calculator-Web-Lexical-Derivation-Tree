@@ -5,6 +5,7 @@ function CalculatorForm() {
     const [input, setInput] = useState("");
     const [resultDisplayed, setResultDisplayed] = useState(false);
     const [error, setError] = useState(null);
+    const [tokens, setTokens] = useState([]);
 
     const handleNumberClick = useCallback((e) => {
         setInput(input => input + e.target.textContent);
@@ -27,6 +28,7 @@ function CalculatorForm() {
         }
     }, [input]);
 
+
     const handleDeleteClick = useCallback(() => {
         setInput(input.slice(0, -1));
     }, [input]);
@@ -39,6 +41,7 @@ function CalculatorForm() {
     const evaluateExpression = useCallback((expression) => {
         expression = expression.replace(/\s+/g, '');
         const tokens = tokenize(expression);
+        setTokens(tokens);
         const result = evaluate(tokens);
         return result;
     }, []);
@@ -46,10 +49,35 @@ function CalculatorForm() {
     const tokenize = useCallback((expression) => {
         const regex = /([-+*/()])/;
         let tokens = expression.split(regex).filter(token => token.trim() !== '');
-        tokens = handleNegativeNumbers(tokens);
-        tokens = insertMultiplicationBeforeParentheses(tokens);
-        return tokens;
+    
+        for (let i = 0; i < tokens.length - 1; i++) {
+            if (!isNaN(tokens[i]) && tokens[i + 1] === '(') {
+                tokens.splice(i + 1, 0, '*');
+            }
+            if (tokens[i] === ')' && !isNaN(tokens[i + 1])) {
+                tokens.splice(i + 1, 0, '*');
+            }
+        }
+    
+        const detailedTokens = [];
+    
+        tokens.forEach((token, index) => {
+            if (!isNaN(token)) {
+                detailedTokens.push({ type: 'Number', value: token, position: index });
+            } else if (token === '(') {
+                detailedTokens.push({ type: 'ParenthesisOpen', value: token, position: index });
+            } else if (token === ')') {
+                detailedTokens.push({ type: 'ParenthesisClose', value: token, position: index });
+            } else if (['+', '-', '*', '/'].includes(token)) {
+                detailedTokens.push({ type: 'Operator', value: token, position: index });
+            } else {
+                throw new Error('Invalid token: ' + token);
+            }
+        });
+    
+        return detailedTokens;
     }, []);
+
 
     const handleNegativeNumbers = useCallback((tokens) => {
         for (let i = 0; i < tokens.length; i++) {
@@ -70,7 +98,7 @@ function CalculatorForm() {
         return tokens;
     }, []);
 
-    const evaluate = useCallback((tokens) => {
+    const evaluate = useCallback((detailedTokens) => {
         const outputQueue = [];
         const operatorStack = [];
         const precedence = {
@@ -80,12 +108,12 @@ function CalculatorForm() {
             '/': 2
         };
 
-        tokens.forEach(token => {
-            if (!isNaN(token)) {
-                outputQueue.push(parseFloat(token));
-            } else if (token === '(') {
-                operatorStack.push(token);
-            } else if (token === ')') {
+        detailedTokens.forEach(token => {
+            if (token.type === 'Number') {
+                outputQueue.push(parseFloat(token.value));
+            } else if (token.type === 'ParenthesisOpen') {
+                operatorStack.push(token.value);
+            } else if (token.type === 'ParenthesisClose') {
                 while (operatorStack.length > 0 && operatorStack[operatorStack.length - 1] !== '(') {
                     outputQueue.push(operatorStack.pop());
                 }
@@ -93,11 +121,11 @@ function CalculatorForm() {
                     throw new Error('Unmatched parentheses');
                 }
                 operatorStack.pop();
-            } else {
-                while (operatorStack.length > 0 && precedence[operatorStack[operatorStack.length - 1]] >= precedence[token]) {
+            } else if (token.type === 'Operator') {
+                while (operatorStack.length > 0 && precedence[operatorStack[operatorStack.length - 1]] >= precedence[token.value]) {
                     outputQueue.push(operatorStack.pop());
                 }
-                operatorStack.push(token);
+                operatorStack.push(token.value);
             }
         });
 
@@ -139,43 +167,52 @@ function CalculatorForm() {
     }, []);
 
     return (
-        <div className={style.calculator}>
-            <div className={style.input} id="input">{input}</div>
-            <div className={style.buttons}>
-                <div className={style.operators}>
-                    <div onClick={handleOperatorClick}>+</div>
-                    <div onClick={handleOperatorClick}>-</div>
-                    <div onClick={handleOperatorClick}>*</div>
-                    <div onClick={handleOperatorClick}>/</div>
+        <div>
+            <div className={style.calculator}>
+                <div className={style.input} id="input">{input}</div>
+                <div className={style.buttons}>
+                    <div className={style.operators}>
+                        <div onClick={handleOperatorClick}>+</div>
+                        <div onClick={handleOperatorClick}>-</div>
+                        <div onClick={handleOperatorClick}>*</div>
+                        <div onClick={handleOperatorClick}>/</div>
+                    </div>
+                    <div className={style.leftPanel}>
+                        <div className={style.numbers}>
+                            <div onClick={handleNumberClick}>7</div>
+                            <div onClick={handleNumberClick}>8</div>
+                            <div onClick={handleNumberClick}>9</div>
+                            <div className={style.delete} onClick={handleDeleteClick}>DEL</div>
+                        </div>
+                        <div className={style.numbers}>
+                            <div onClick={handleNumberClick}>4</div>
+                            <div onClick={handleNumberClick}>5</div>
+                            <div onClick={handleNumberClick}>6</div>
+                            <div className={style.equal} id="result" onClick={handleEqualClick}>=</div>
+                        </div>
+                        <div className={style.numbers}>
+                            <div onClick={handleNumberClick}>1</div>
+                            <div onClick={handleNumberClick}>2</div>
+                            <div onClick={handleNumberClick}>3</div>
+                            <div className={style.clear} id="clear" onClick={handleClearClick}>C</div>
+                        </div>
+                        <div className={style.numbers}>
+                            <div onClick={handleNumberClick}>0</div>
+                            <div onClick={handleNumberClick}>.</div>
+                            <div onClick={() => setInput(input + '(')}>(</div>
+                            <div onClick={() => setInput(input + ')')}>)</div>
+                        </div>
+                    </div>
                 </div>
-                <div className={style.leftPanel}>
-                    <div className={style.numbers}>
-                        <div onClick={handleNumberClick}>7</div>
-                        <div onClick={handleNumberClick}>8</div>
-                        <div onClick={handleNumberClick}>9</div>
-                        <div className={style.delete} onClick={handleDeleteClick}>DEL</div>
-                    </div>
-                    <div className={style.numbers}>
-                        <div onClick={handleNumberClick}>4</div>
-                        <div onClick={handleNumberClick}>5</div>
-                        <div onClick={handleNumberClick}>6</div>
-                        <div className={style.equal} id="result" onClick={handleEqualClick}>=</div>
-                    </div>
-                    <div className={style.numbers}>
-                        <div onClick={handleNumberClick}>1</div>
-                        <div onClick={handleNumberClick}>2</div>
-                        <div onClick={handleNumberClick}>3</div>
-                        <div className={style.clear} id="clear" onClick={handleClearClick}>C</div>
-                    </div>
-                    <div className={style.numbers}>
-                        <div onClick={handleNumberClick}>0</div>
-                        <div onClick={handleNumberClick}>.</div>
-                        <div onClick={() => setInput(input + '(')}>(</div>
-                        <div onClick={() => setInput(input + ')')}>)</div>
-                    </div>
-                </div>
-
             </div>
+            <div className={style.tokens} id="tokens">
+                {tokens.map((token, index) => (
+                    <div key={index}>
+                        Linea 1 - Data type: {token.type}, Value: "{token.value}", Position: {token.position}
+                    </div>
+                ))}
+            </div>
+
         </div>
     );
 }
