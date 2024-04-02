@@ -8,14 +8,30 @@ function CalculatorForm() {
     const [tokens, setTokens] = useState([]);
 
     const handleNumberClick = useCallback((e) => {
-        setInput(input => input + e.target.textContent);
+        setInput(input => {
+            const lastChar = input[input.length - 1];
+            if (e.target.textContent === '.' && lastChar === '.') {
+                return input;
+            } else {
+                return input + e.target.textContent;
+            }
+        });
     }, []);
 
     const handleOperatorClick = useCallback((e) => {
-        const lastChar = input[input.length - 1];
-        setInput(input => (lastChar === '+' || lastChar === '-' || lastChar === '*' || lastChar === '/') ? input.slice(0, -1) + e.target.textContent : input + e.target.textContent);
+        const operators = new Set(['+', '-', '*', '/']);
+        setInput(input => {
+            const lastChar = input[input.length - 1];
+            if (lastChar === '.') {
+                return input;
+            } else if (operators.has(lastChar)) {
+                return input.slice(0, -1) + e.target.textContent;
+            } else {
+                return input + e.target.textContent;
+            }
+        });
     }, [input]);
-
+    
     const handleEqualClick = useCallback(() => {
         try {
             const result = evaluateExpression(input);
@@ -50,28 +66,28 @@ function CalculatorForm() {
         return result;
     }, []);
 
-const tokenize = useCallback((expression) => {
-    const regex = /([-+*/()])/;
-    let tokens = expression.split(regex).filter(token => token.trim() !== '');
-
-    for (let i = 0; i < tokens.length - 1; i++) {
-        if (tokens[i] === '-' && (i === 0 || tokens[i - 1] === '(' || ['+', '-', '*', '/'].includes(tokens[i - 1]))) {
-            tokens[i] += tokens[i + 1];
-            tokens.splice(i + 1, 1);
-        }
-        if (!isNaN(tokens[i]) && tokens[i + 1] === '(') {
-            tokens.splice(i + 1, 0, '*');
-        }
-        if (tokens[i] === ')' && !isNaN(tokens[i + 1])) {
-            tokens.splice(i + 1, 0, '*');
-        }
-        if (tokens[i] === ')' && tokens[i + 1] === '(') {
-            tokens.splice(i + 1, 0, '*');
-        }
-    }
+    const tokenize = useCallback((expression) => {
+        const regex = /([-+*/()])/;
+        let tokens = expression.split(regex).filter(token => token.trim() !== '');
     
+        for (let i = 0; i < tokens.length - 1; i++) {
+            if (tokens[i] === '-' && (i === 0 || tokens[i - 1] === '(' || ['+', '-', '*', '/'].includes(tokens[i - 1]))) {
+                tokens[i] += tokens[i + 1];
+                tokens.splice(i + 1, 1);
+            }
+            if (!isNaN(tokens[i]) && tokens[i + 1] === '(') {
+                tokens.splice(i + 1, 0, '*');
+            }
+            if (tokens[i] === ')' && !isNaN(tokens[i + 1])) {
+                tokens.splice(i + 1, 0, '*');
+            }
+            if (tokens[i] === ')' && tokens[i + 1] === '(') {
+                tokens.splice(i + 1, 0, '*');
+            }
+        }
+        
         const detailedTokens = [];
-    
+        
         tokens.forEach((token, index) => {
             if (!isNaN(token)) {
                 detailedTokens.push({ type: 'Number', value: token, position: index });
@@ -80,14 +96,32 @@ const tokenize = useCallback((expression) => {
             } else if (token === ')') {
                 detailedTokens.push({ type: 'ParenthesisClose', value: token, position: index });
             } else if (['+', '-', '*', '/'].includes(token)) {
-                detailedTokens.push({ type: 'Operator', value: token, position: index });
+                let operatorType;
+                switch (token) {
+                    case '+':
+                        operatorType = 'PLUS';
+                        break;
+                    case '-':
+                        operatorType = 'MINUS';
+                        break;
+                    case '*':
+                        operatorType = 'MULTIPLY';
+                        break;
+                    case '/':
+                        operatorType = 'DIVIDE';
+                        break;
+                    default:
+                        throw new Error('Invalid operator: ' + token);
+                }
+                detailedTokens.push({ type: 'Operator', value: token, operatorType, position: index });
             } else {
                 throw new Error('Invalid token: ' + token);
             }
         });
-    
+        
         return detailedTokens;
     }, []);
+    
 
     const evaluate = useCallback((detailedTokens) => {
         const outputQueue = [];
@@ -197,16 +231,16 @@ const tokenize = useCallback((expression) => {
                 </div>
             </div>
             <div className={style.tokens} id="tokens">
-                <h1>Analizador Léxico</h1>
-                {tokens.map((token, index) => (
-                    <div key={index}>
-                        Linea 1 - Data type: {token.type}, Value: "{token.value}", Position: {token.position}
-                    </div>
-                ))}
-            </div>
-            <div className={style.arbol}>
-                <h1></h1>
-            </div>
+            <h1>Analizador Léxico</h1>
+            {tokens.map((token, index) => (
+                <div key={index}>
+                    Linea 1 - Data type: {token.type === 'Operator' ? token.operatorType : token.type}, Value: "{token.value}", Position: {token.position}
+                </div>
+            ))}
+        </div>
+        <div className={style.arbol}>
+            <h1></h1>
+        </div>
         </div>
     );
 }
