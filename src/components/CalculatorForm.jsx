@@ -34,7 +34,7 @@ function CalculatorForm() {
             }
         });
     }, [input]);
-    
+
     const handleEqualClick = useCallback(() => {
         try {
             const result = evaluateExpression(input);
@@ -72,7 +72,7 @@ function CalculatorForm() {
     const tokenize = useCallback((expression) => {
         const regex = /([-+*/()])/;
         let tokens = expression.split(regex).filter(token => token.trim() !== '');
-    
+
         for (let i = 0; i < tokens.length - 1; i++) {
             if (tokens[i] === '-' && (i === 0 || tokens[i - 1] === '(' || ['+', '-', '*', '/'].includes(tokens[i - 1]))) {
                 tokens[i] += tokens[i + 1];
@@ -88,9 +88,9 @@ function CalculatorForm() {
                 tokens.splice(i + 1, 0, '*');
             }
         }
-        
+
         const detailedTokens = [];
-        
+
         tokens.forEach((token, index) => {
             if (!isNaN(token)) {
                 detailedTokens.push({ type: 'Number', value: token, position: index });
@@ -121,10 +121,10 @@ function CalculatorForm() {
                 throw new Error('Invalid token: ' + token);
             }
         });
-        
+
         return detailedTokens;
     }, []);
-    
+
 
     const evaluate = useCallback((detailedTokens) => {
         const outputQueue = [];
@@ -234,16 +234,16 @@ function CalculatorForm() {
                 </div>
             </div>
             <div className={style.tokens} id="tokens">
-            <h1>Analizador Léxico</h1>
-            {tokens.map((token, index) => (
-                <div key={index}>
-                    Linea 1 - Data type: {token.type === 'Operator' ? token.operatorType : token.type}, Value: "{token.value}", Position: {token.position}
-                </div>
-            ))}
-        </div>
-        <div className={style.arbol}>
-            <h1></h1>
-        </div>
+                <h1>Analizador Léxico</h1>
+                {tokens.map((token, index) => (
+                    <div key={index}>
+                        Linea 1 - Data type: {token.type === 'Operator' ? token.operatorType : token.type}, Value: "{token.value}", Position: {token.position}
+                    </div>
+                ))}
+            </div>
+            <div className={style.arbol}>
+                <h1></h1>
+            </div>
         </div>
     );
 }
