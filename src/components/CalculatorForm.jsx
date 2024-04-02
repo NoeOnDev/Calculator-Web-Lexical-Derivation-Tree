@@ -19,9 +19,14 @@ function CalculatorForm() {
     const handleEqualClick = useCallback(() => {
         try {
             const result = evaluateExpression(input);
+            if (isNaN(result)) {
+                throw new Error('Resultado inválido: ' + result);
+            }
             setInput(result.toString());
             setResultDisplayed(true);
             setError(null);
+            const tokens = tokenize(input);
+            setTokens(tokens);
         } catch (error) {
             setInput('Error: ' + error.message);
             setError(error.message);
@@ -41,7 +46,6 @@ function CalculatorForm() {
     const evaluateExpression = useCallback((expression) => {
         expression = expression.replace(/\s+/g, '');
         const tokens = tokenize(expression);
-        setTokens(tokens);
         const result = evaluate(tokens);
         return result;
     }, []);
@@ -49,7 +53,7 @@ function CalculatorForm() {
     const tokenize = useCallback((expression) => {
         const regex = /([-+*/()])/;
         let tokens = expression.split(regex).filter(token => token.trim() !== '');
-
+    
         for (let i = 0; i < tokens.length - 1; i++) {
             if (!isNaN(tokens[i]) && tokens[i + 1] === '(') {
                 tokens.splice(i + 1, 0, '*');
@@ -57,10 +61,13 @@ function CalculatorForm() {
             if (tokens[i] === ')' && !isNaN(tokens[i + 1])) {
                 tokens.splice(i + 1, 0, '*');
             }
+            if (tokens[i] === ')' && tokens[i + 1] === '(') {
+                tokens.splice(i + 1, 0, '*');
+            }
         }
-
+    
         const detailedTokens = [];
-
+    
         tokens.forEach((token, index) => {
             if (!isNaN(token)) {
                 detailedTokens.push({ type: 'Number', value: token, position: index });
@@ -74,7 +81,7 @@ function CalculatorForm() {
                 throw new Error('Invalid token: ' + token);
             }
         });
-
+    
         return detailedTokens;
     }, []);
 
@@ -205,18 +212,16 @@ function CalculatorForm() {
                     </div>
                 </div>
             </div>
-            <div className={style.containerTokens}>
-                <div className={style.tokens} id="tokens">
-                    <h1>Analizador Léxico</h1>
-                    {tokens.map((token, index) => (
-                        <div key={index}>
-                            Linea 1 - Data type: {token.type}, Value: "{token.value}", Position: {token.position}
-                        </div>
-                    ))}
-                </div>
-                <div>
-                    <h1>Arbol de derivación</h1>
-                </div>
+            <div className={style.tokens} id="tokens">
+                <h1>Analizador Léxico</h1>
+                {tokens.map((token, index) => (
+                    <div key={index}>
+                        Linea 1 - Data type: {token.type}, Value: "{token.value}", Position: {token.position}
+                    </div>
+                ))}
+            </div>
+            <div className={style.arbol}>
+                <h1></h1>
             </div>
         </div>
     );

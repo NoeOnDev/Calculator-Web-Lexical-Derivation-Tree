@@ -17,18 +17,13 @@ body {
   align-content: center;
 }
 
-.containerTokens {
-  font-size: 1.2rem;  
-  display: flex;
-  flex-direction: row;
-  gap: 300px;
-}
-
 .tokens {
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  font-size: 1.2rem;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
   gap: 10px;
 }
 
