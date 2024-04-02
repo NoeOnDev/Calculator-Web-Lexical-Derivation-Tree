@@ -49,7 +49,7 @@ function CalculatorForm() {
     const tokenize = useCallback((expression) => {
         const regex = /([-+*/()])/;
         let tokens = expression.split(regex).filter(token => token.trim() !== '');
-    
+
         for (let i = 0; i < tokens.length - 1; i++) {
             if (!isNaN(tokens[i]) && tokens[i + 1] === '(') {
                 tokens.splice(i + 1, 0, '*');
@@ -58,9 +58,9 @@ function CalculatorForm() {
                 tokens.splice(i + 1, 0, '*');
             }
         }
-    
+
         const detailedTokens = [];
-    
+
         tokens.forEach((token, index) => {
             if (!isNaN(token)) {
                 detailedTokens.push({ type: 'Number', value: token, position: index });
@@ -74,7 +74,7 @@ function CalculatorForm() {
                 throw new Error('Invalid token: ' + token);
             }
         });
-    
+
         return detailedTokens;
     }, []);
 
@@ -205,15 +205,19 @@ function CalculatorForm() {
                     </div>
                 </div>
             </div>
-            <div className={style.tokens} id="tokens">
-                <h1>Analizador Léxico</h1>
-                {tokens.map((token, index) => (
-                    <div key={index}>
-                        Linea 1 - Data type: {token.type}, Value: "{token.value}", Position: {token.position}
-                    </div>
-                ))}
+            <div className={style.containerTokens}>
+                <div className={style.tokens} id="tokens">
+                    <h1>Analizador Léxico</h1>
+                    {tokens.map((token, index) => (
+                        <div key={index}>
+                            Linea 1 - Data type: {token.type}, Value: "{token.value}", Position: {token.position}
+                        </div>
+                    ))}
+                </div>
+                <div>
+                    <h1>Arbol de derivación</h1>
+                </div>
             </div>
-
         </div>
     );
 }

@@ -17,8 +17,14 @@ body {
   align-content: center;
 }
 
+.containerTokens {
+  font-size: 1.2rem;  
+  display: flex;
+  flex-direction: row;
+  gap: 300px;
+}
+
 .tokens {
-  font-size: 1.2rem;
   align-items: center;
   justify-content: center;
   flex-direction: column;
