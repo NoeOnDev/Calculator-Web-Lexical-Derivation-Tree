@@ -10,11 +10,14 @@ function CalculatorForm() {
     const handleNumberClick = useCallback((e) => {
         setInput(input => {
             const lastChar = input[input.length - 1];
-            if (e.target.textContent === '.' && lastChar === '.') {
-                return input;
-            } else {
-                return input + e.target.textContent;
+            if (e.target.textContent === '.') {
+                const parts = input.split(/[\+\-\*\/]/);
+                const lastNumber = parts[parts.length - 1];
+                if (lastNumber.includes('.')) {
+                    return input;
+                }
             }
+            return input + e.target.textContent;
         });
     }, []);
 
