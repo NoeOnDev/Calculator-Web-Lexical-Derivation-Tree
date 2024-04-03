@@ -5,7 +5,6 @@ function CalculadoraFrom() {
     const [display, setDisplay] = useState("");
 
     const handleClick = (val) => {
-        // Manejo de múltiples puntos decimales
         if (val === '.' && display.includes('.')) {
             return;
         }
