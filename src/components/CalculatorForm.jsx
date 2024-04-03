@@ -8,20 +8,18 @@ function CalculatorForm() {
     const [tokens, setTokens] = useState([]);
 
     const handleNumberClick = useCallback((e) => {
-        setInput(input => appendNumber(input, e.target.textContent));
-    }, []);
-
-    function appendNumber(input, newNumber) {
-        const lastChar = input[input.length - 1];
-        if (newNumber === '.') {
-            const parts = input.split(/[\+\-\*\/]/);
-            const lastNumber = parts[parts.length - 1];
-            if (lastNumber.includes('.')) {
-                return input;
+        setInput(input => {
+            const lastChar = input[input.length - 1];
+            if (e.target.textContent === '.') {
+                const parts = input.split(/[\+\-\*\/]/);
+                const lastNumber = parts[parts.length - 1];
+                if (lastNumber.includes('.')) {
+                    return input;
+                }
             }
-        }
-        return input + newNumber;
-    }
+            return input + e.target.textContent;
+        });
+    }, []);
 
     const handleOperatorClick = useCallback((e) => {
         const operators = new Set(['+', '-', '*', '/']);
@@ -44,6 +42,7 @@ function CalculatorForm() {
                 throw new Error('Resultado inválido: ' + result);
             }
             setInput(result.toString());
+            setResultDisplayed(true);
             setError(null);
             const tokens = tokenize(input);
             setTokens(tokens);
@@ -52,6 +51,7 @@ function CalculatorForm() {
             setError(error.message);
         }
     }, [input]);
+
 
     const handleDeleteClick = useCallback(() => {
         setInput(input.slice(0, -1));
@@ -135,7 +135,7 @@ function CalculatorForm() {
             '*': 2,
             '/': 2
         };
-    
+
         detailedTokens.forEach(token => {
             if (token.type === 'Number') {
                 outputQueue.push(parseFloat(token.value));
@@ -156,7 +156,7 @@ function CalculatorForm() {
                 operatorStack.push(token.value);
             }
         });
-    
+
         while (operatorStack.length > 0) {
             const op = operatorStack.pop();
             if (op === '(') {
@@ -164,7 +164,7 @@ function CalculatorForm() {
             }
             outputQueue.push(op);
         }
-    
+
         const stack = [];
         outputQueue.forEach(token => {
             if (!isNaN(token)) {
@@ -186,14 +186,13 @@ function CalculatorForm() {
                 }
             }
         });
-    
+
         if (stack.length !== 1) {
             throw new Error('Invalid expression');
         }
-    
+
         return stack[0];
     }, []);
-    
 
     return (
         <div className={style.container}>
