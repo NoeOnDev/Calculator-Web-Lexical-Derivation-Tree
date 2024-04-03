@@ -5,7 +5,9 @@ function CalculadoraFrom() {
     const [display, setDisplay] = useState("");
 
     const handleClick = (val) => {
-        if (val === '.' && display.includes('.')) {
+        const lastNumber = display.split(/[\+\-\*\/]/).slice(-1)[0];
+
+        if (val === '.' && lastNumber.includes('.')) {
             return;
         }
 
