@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from "react";
-import Decimal from "decimal.js";
 import style from "../styles/calculatorStyle.module.css";
 
 function CalculatorForm() {
@@ -9,18 +8,20 @@ function CalculatorForm() {
     const [tokens, setTokens] = useState([]);
 
     const handleNumberClick = useCallback((e) => {
-        setInput(input => {
-            const lastChar = input[input.length - 1];
-            if (e.target.textContent === '.') {
-                const parts = input.split(/[\+\-\*\/]/);
-                const lastNumber = parts[parts.length - 1];
-                if (lastNumber.includes('.')) {
-                    return input;
-                }
-            }
-            return input + e.target.textContent;
-        });
+        setInput(input => appendNumber(input, e.target.textContent));
     }, []);
+
+    function appendNumber(input, newNumber) {
+        const lastChar = input[input.length - 1];
+        if (newNumber === '.') {
+            const parts = input.split(/[\+\-\*\/]/);
+            const lastNumber = parts[parts.length - 1];
+            if (lastNumber.includes('.')) {
+                return input;
+            }
+        }
+        return input + newNumber;
+    }
 
     const handleOperatorClick = useCallback((e) => {
         const operators = new Set(['+', '-', '*', '/']);
@@ -42,8 +43,7 @@ function CalculatorForm() {
             if (isNaN(result)) {
                 throw new Error('Resultado inválido: ' + result);
             }
-            setInput(result.toFixed(2));
-            setResultDisplayed(true);
+            setInput(result.toString());
             setError(null);
             const tokens = tokenize(input);
             setTokens(tokens);
@@ -135,7 +135,7 @@ function CalculatorForm() {
             '*': 2,
             '/': 2
         };
-
+    
         detailedTokens.forEach(token => {
             if (token.type === 'Number') {
                 outputQueue.push(parseFloat(token.value));
@@ -156,7 +156,7 @@ function CalculatorForm() {
                 operatorStack.push(token.value);
             }
         });
-
+    
         while (operatorStack.length > 0) {
             const op = operatorStack.pop();
             if (op === '(') {
@@ -164,35 +164,36 @@ function CalculatorForm() {
             }
             outputQueue.push(op);
         }
-
+    
         const stack = [];
         outputQueue.forEach(token => {
             if (!isNaN(token)) {
-                stack.push(new Decimal(token));
+                stack.push(token);
             } else {
                 const b = stack.pop();
                 const a = stack.pop();
                 if (token === '+') {
-                    stack.push(a.plus(b));
+                    stack.push(a + b);
                 } else if (token === '-') {
-                    stack.push(a.minus(b));
+                    stack.push(a - b);
                 } else if (token === '*') {
-                    stack.push(a.times(b));
+                    stack.push(a * b);
                 } else if (token === '/') {
-                    if (b.equals(0)) {
+                    if (b === 0) {
                         throw new Error('Division by zero');
                     }
-                    stack.push(a.dividedBy(b));
+                    stack.push(a / b);
                 }
             }
         });
-
+    
         if (stack.length !== 1) {
             throw new Error('Invalid expression');
         }
-
+    
         return stack[0];
     }, []);
+    
 
     return (
         <div className={style.container}>
