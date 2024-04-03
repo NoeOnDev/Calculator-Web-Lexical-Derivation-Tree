@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import * as math from 'mathjs';
 
+
 function CalculadoraFrom() {
     const [display, setDisplay] = useState("");
 
@@ -24,7 +25,7 @@ function CalculadoraFrom() {
         setDisplay(display + val);
     };
 
-    const calculate = () => {
+    const calculate = async () => {
         try {
             if ((display.match(/\(/g) || []).length !== (display.match(/\)/g) || []).length) {
                 throw new Error();
@@ -33,6 +34,8 @@ function CalculadoraFrom() {
             if (/\/0/.test(display)) {
                 throw new Error();
             }
+
+            await analizarExpresion(display);
 
             const result = math.evaluate(display);
             setDisplay(math.format(result, { precision: 14 }));
@@ -48,6 +51,19 @@ function CalculadoraFrom() {
     const deleteLastChar = () => {
         setDisplay(display.slice(0, -1));
     };
+
+    const analizarExpresion = async (expresion) => {
+        const response = await fetch('http://localhost:3001/analizador/lexico', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ expresion })
+        });
+
+        const data = await response.json();
+        console.log(data.resultado);
+    }
 
     return (
         <div className="Calculadora">
