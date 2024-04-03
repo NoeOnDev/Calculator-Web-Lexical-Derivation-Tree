@@ -1,11 +1,6 @@
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 4% auto;
-  font-family: 'Source Sans Pro', sans-serif;
-  letter-spacing: 5px;
-  font-size: 1.8rem;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
