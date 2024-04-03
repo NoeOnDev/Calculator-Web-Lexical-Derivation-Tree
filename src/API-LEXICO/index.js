@@ -28,8 +28,19 @@ app.post('/analizador/lexico', (req, res) => {
         lexer.reset(expresion);
         let token;
         let resultado = [];
+        let linea = 1;
         while (token = lexer.next()) {
-            resultado.push(token);
+            if (token.type !== 'NL' && token.type !== 'WS') {
+                resultado.push({
+                    linea,
+                    tipo: token.type,
+                    valor: token.value,
+                    posicion: token.col - 1
+                });
+            }
+            if (token.type === 'NL') {
+                linea++;
+            }
         }
 
         res.send({ resultado });

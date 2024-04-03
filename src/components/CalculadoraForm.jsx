@@ -5,6 +5,7 @@ import styles from '../styles/calculadoraStyle.module.css';
 
 function CalculadoraFrom() {
     const [display, setDisplay] = useState("");
+    const [analisis, setAnalisis] = useState([]);
 
     const handleClick = (val) => {
         const lastNumber = display.split(/[\+\-\*\/]/).slice(-1)[0];
@@ -63,165 +64,177 @@ function CalculadoraFrom() {
         });
 
         const data = await response.json();
-        console.log(data.resultado);
+        setAnalisis(data.resultado);
     }
 
     return (
         <div className={styles.container}>
-        <div className={styles.calculadora}>
-          <div className={styles.input}></div>
-          <div className={styles.numbers}>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.buttonOperator}>
-                  <span className={styles.buttonTextOperator}>CE</span>
-                </button>
-              </div>
+            <div className={styles.calculadora}>
+                <div className={styles.input}>{display}</div>
+                <div className={styles.numbers}>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={clearDisplay} className={styles.buttonOperator}>
+                                <span className={styles.buttonTextOperator}>CE</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick("(")} className={styles.buttonOperator}>
+                                <span className={styles.buttonTextOperator}>(</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick(")")} className={styles.buttonOperator}>
+                                <span className={styles.buttonTextOperator}>)</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick("/")} className={styles.buttonOperator}>
+                                <span className={styles.buttonTextOperator}>/</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div className={styles.numbers}>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick(7)} className={styles.button}>
+                                <span className={styles.buttonText}>7</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick(8)} className={styles.button}>
+                                <span className={styles.buttonText}>8</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick(9)} className={styles.button}>
+                                <span className={styles.buttonText}>9</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick("*")} className={styles.buttonOperator}>
+                                <span className={styles.buttonTextOperator}>*</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div className={styles.numbers}>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick(4)} className={styles.button}>
+                                <span className={styles.buttonText}>4</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick(5)} className={styles.button}>
+                                <span className={styles.buttonText}>5</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick(6)} className={styles.button}>
+                                <span className={styles.buttonText}>6</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick("-")} className={styles.buttonOperator}>
+                                <span className={styles.buttonTextOperator}>-</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div className={styles.numbers}>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick(1)} className={styles.button}>
+                                <span className={styles.buttonText}>1</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick(2)} className={styles.button}>
+                                <span className={styles.buttonText}>2</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick(3)} className={styles.button}>
+                                <span className={styles.buttonText}>3</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick("+")} className={styles.buttonOperator}>
+                                <span className={styles.buttonTextOperator}>+</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div className={styles.numbers}>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={deleteLastChar} className={styles.buttonDelete}>
+                                <span className={styles.buttonTextDelete}>Del</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick(0)} className={styles.button}>
+                                <span className={styles.buttonText}>0</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={() => handleClick(".")} className={styles.button}>
+                                <span className={styles.buttonText}>.</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className={styles.buttonPair}>
+                        <div className={styles.btn}>
+                            <button onClick={calculate} className={styles.button}>
+                                <span className={styles.buttonText}>=</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.buttonOperator}>
-                  <span className={styles.buttonTextOperator}>(</span>
-                </button>
-              </div>
+            <div className={styles.analizadorLexico}>
+                <div>
+                    <h1>Analizador Léxico</h1>
+                    <ul>
+                        {analisis.map((token, index) => (
+                            <li key={index}>
+                                Linea {token.linea} - Data type: {token.tipo}, Value: "{token.valor}", Position: {token.posicion}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.buttonOperator}>
-                  <span className={styles.buttonTextOperator}>)</span>
-                </button>
-              </div>
-            </div>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.buttonOperator}>
-                  <span className={styles.buttonTextOperator}>/</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className={styles.numbers}>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.button}>
-                  <span className={styles.buttonText}>7</span>
-                </button>
-              </div>
-            </div>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.button}>
-                  <span className={styles.buttonText}>8</span>
-                </button>
-              </div>
-            </div>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.button}>
-                  <span className={styles.buttonText}>9</span>
-                </button>
-              </div>
-            </div>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.buttonOperator}>
-                  <span className={styles.buttonTextOperator}>*</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className={styles.numbers}>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.button}>
-                  <span className={styles.buttonText}>4</span>
-                </button>
-              </div>
-            </div>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.button}>
-                  <span className={styles.buttonText}>5</span>
-                </button>
-              </div>
-            </div>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.button}>
-                  <span className={styles.buttonText}>6</span>
-                </button>
-              </div>
-            </div>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.buttonOperator}>
-                  <span className={styles.buttonTextOperator}>-</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className={styles.numbers}>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.button}>
-                  <span className={styles.buttonText}>1</span>
-                </button>
-              </div>
-            </div>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.button}>
-                  <span className={styles.buttonText}>2</span>
-                </button>
-              </div>
-            </div>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.button}>
-                  <span className={styles.buttonText}>3</span>
-                </button>
-              </div>
-            </div>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.buttonOperator}>
-                  <span className={styles.buttonTextOperator}>+</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className={styles.numbers}>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.buttonDelete}>
-                  <span className={styles.buttonTextDelete}>Del</span>
-                </button>
-              </div>
-            </div>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.button}>
-                  <span className={styles.buttonText}>0</span>
-                </button>
-              </div>
-            </div>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.button}>
-                  <span className={styles.buttonText}>.</span>
-                </button>
-              </div>
-            </div>
-            <div className={styles.buttonPair}>
-              <div className={styles.btn}>
-                <button className={styles.button}>
-                  <span className={styles.buttonText}>=</span>
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     );
 }
 
