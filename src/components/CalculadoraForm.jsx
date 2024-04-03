@@ -14,6 +14,11 @@ function CalculadoraFrom() {
             return;
         }
 
+        if (val === '-' && lastChar !== '-' && !['+', '*', '/'].includes(lastChar)) {
+            setDisplay(display + val);
+            return;
+        }
+
         setDisplay(display + val);
     };
 
@@ -28,7 +33,7 @@ function CalculadoraFrom() {
             }
 
             const result = math.evaluate(display);
-            setDisplay(result.toString());
+            setDisplay(math.format(result, { precision: 14 }));
         } catch {
             setDisplay("Error");
         }
