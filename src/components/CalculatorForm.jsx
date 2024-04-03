@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import Decimal from "decimal.js";
 import style from "../styles/calculatorStyle.module.css";
 
 function CalculatorForm() {
@@ -41,7 +42,7 @@ function CalculatorForm() {
             if (isNaN(result)) {
                 throw new Error('Resultado inválido: ' + result);
             }
-            setInput(result.toString());
+            setInput(result.toFixed(2));
             setResultDisplayed(true);
             setError(null);
             const tokens = tokenize(input);
@@ -51,7 +52,6 @@ function CalculatorForm() {
             setError(error.message);
         }
     }, [input]);
-
 
     const handleDeleteClick = useCallback(() => {
         setInput(input.slice(0, -1));
@@ -168,21 +168,21 @@ function CalculatorForm() {
         const stack = [];
         outputQueue.forEach(token => {
             if (!isNaN(token)) {
-                stack.push(token);
+                stack.push(new Decimal(token));
             } else {
                 const b = stack.pop();
                 const a = stack.pop();
                 if (token === '+') {
-                    stack.push(a + b);
+                    stack.push(a.plus(b));
                 } else if (token === '-') {
-                    stack.push(a - b);
+                    stack.push(a.minus(b));
                 } else if (token === '*') {
-                    stack.push(a * b);
+                    stack.push(a.times(b));
                 } else if (token === '/') {
-                    if (b === 0) {
+                    if (b.equals(0)) {
                         throw new Error('Division by zero');
                     }
-                    stack.push(a / b);
+                    stack.push(a.dividedBy(b));
                 }
             }
         });
