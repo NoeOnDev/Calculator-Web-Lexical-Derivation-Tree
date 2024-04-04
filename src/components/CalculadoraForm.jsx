@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import * as math from 'mathjs';
+import { parse } from 'mathjs';
+import Tree from 'react-d3-tree';
 import styles from '../styles/calculadoraStyle.module.css';
 
 function CalculadoraFrom() {
     const [display, setDisplay] = useState("");
     const [analisis, setAnalisis] = useState([]);
+    const [arbol, setArbol] = useState([]);
     const [isValid, setIsValid] = useState(true);
 
     const handleClick = (val) => {
@@ -29,6 +32,10 @@ function CalculadoraFrom() {
             }
             if (val === '.' && lastChar === '(') {
                 setDisplay(display + '0' + val);
+                return;
+            }
+            if (['+', '-', '*', '/'].includes(val) && ['+', '-', '*', '/'].includes(lastChar)) {
+                setDisplay(display.slice(0, -1) + val);
                 return;
             }
             setDisplay(display + val);
@@ -56,6 +63,7 @@ function CalculadoraFrom() {
 
             if (isValid) {
                 await analizarExpresion(display);
+                generarArbol(display);
             }
         } catch {
             setDisplay("Sintax Error");
@@ -84,6 +92,33 @@ function CalculadoraFrom() {
         const data = await response.json();
         setAnalisis(data.resultado);
     }
+
+    const transformarArbol = (nodo) => {
+        return {
+            name: nodo.op || nodo.fn || nodo.name || nodo.value,
+            children: nodo.args ? nodo.args.map(transformarArbol) : [],
+        };
+    };
+
+    const generarArbol = (expresion) => {
+        const nodo = parse(expresion);
+        const arbolMathjs = nodo.toJSON();
+        const arbolD3 = transformarArbol(arbolMathjs);
+        setArbol(arbolD3);
+    }
+
+    const customPathFunc = (linkData, orientation) => {
+        const { source, target } = linkData;
+        const isHorizontal = orientation === 'horizontal';
+
+        const startX = isHorizontal ? source.y : source.x;
+        const startY = isHorizontal ? source.x : source.y;
+        const endX = isHorizontal ? target.y : target.x;
+        const endY = isHorizontal ? target.x : target.y;
+
+        return `M${startX},${startY} L${endX},${endY}`;
+    };
+
 
     return (
         <div className={styles.container}>
@@ -252,6 +287,19 @@ function CalculadoraFrom() {
                     </ul>
                 </div>
             </div>
+            <div className={styles.arbolSintactico}>
+                    <div className={styles.textArbolSintactico}>
+                        <h1>Árbol Sintáctico</h1>
+                        <div className={styles.containerTextArbol}>
+                            {arbol && Object.keys(arbol).length > 0 &&
+                                <Tree className={styles.arbol}
+                                    data={arbol}
+                                    orientation='vertical'
+                                    pathFunc={(linkData) => customPathFunc(linkData, 'vertical')}
+                                />}
+                        </div>
+                    </div>
+                </div>
         </div>
     );
 }
