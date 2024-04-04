@@ -68,6 +68,10 @@ app.post("/analizador/lexico", (req, res) => {
   }
 });
 
+app.get("/", (req, res) => {
+  res.send(`API running on port ${PORT}`);
+});
+
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port http://localhost:${PORT}`);
 });
