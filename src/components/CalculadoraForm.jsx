@@ -101,7 +101,12 @@ function CalculadoraFrom() {
     };
 
     const generarArbol = (expresion) => {
-        const nodo = parse(expresion);
+        let expresionConMultiplicacion = expresion.replace(/(\d)\(/g, '$1*(');
+        expresionConMultiplicacion = expresionConMultiplicacion.replace(/\)(\d)/g, ')*$1');
+    
+        const expresionSinParentesis = expresionConMultiplicacion.replace(/\(([^()]+)\)/g, '$1');
+    
+        const nodo = parse(expresionSinParentesis);
         const arbolMathjs = nodo.toJSON();
         const arbolD3 = transformarArbol(arbolMathjs);
         setArbol(arbolD3);
