@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 
 let lexer = moo.compile({
     WS:      /[ \t]+/,
-    number:  /0|[1-9][0-9]*/,
+    number:  /0\.[0-9]+|[1-9][0-9]*\.?[0-9]*|\.[0-9]+/,
     plus:    '+',
     minus:   '-',
     times:   '*',
@@ -46,6 +46,7 @@ app.post('/analizador/lexico', (req, res) => {
         res.send({ resultado });
     } catch (error) {
         res.status(500).send({ error: error.toString() });
+        console.error(error);
     }
 });
 

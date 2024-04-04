@@ -2,29 +2,39 @@ import React, { useState } from 'react';
 import * as math from 'mathjs';
 import styles from '../styles/calculadoraStyle.module.css';
 
-
 function CalculadoraFrom() {
     const [display, setDisplay] = useState("");
     const [analisis, setAnalisis] = useState([]);
 
     const handleClick = (val) => {
-        const lastNumber = display.split(/[\+\-\*\/]/).slice(-1)[0];
+        try {
+            const lastNumber = display.split(/[\+\-\*\/\(]/).slice(-1)[0];
+            const lastChar = display.slice(-1);
 
-        if (val === '.' && lastNumber.includes('.')) {
-            return;
-        }
-
-        const lastChar = display.slice(-1);
-        if (['+', '-', '*', '/'].includes(val) && ['+', '-', '*', '/'].includes(lastChar)) {
-            return;
-        }
-
-        if (val === '-' && lastChar !== '-' && !['+', '*', '/'].includes(lastChar)) {
+            if (val === '.' && display.length === 0) {
+                setDisplay('0.');
+                return;
+            }
+            if (val === '.' && lastNumber.includes('.') && !['+', '-', '*', '/'].includes(lastChar)) {
+                return;
+            }
+            if (val === '-' && lastChar !== '-' && !['+', '*', '/'].includes(lastChar)) {
+                setDisplay(display + val);
+                return;
+            }
+            if (val === '.' && ['+', '-', '*', '/'].includes(lastChar)) {
+                setDisplay(display + '0' + val);
+                return;
+            }
+            if (val === '.' && lastChar === '(') {
+                setDisplay(display + '0' + val);
+                return;
+            }
             setDisplay(display + val);
-            return;
+        } catch (error) {
+            setDisplay("Error");
+            console.error(error);
         }
-
-        setDisplay(display + val);
     };
 
     const calculate = async () => {
@@ -40,7 +50,8 @@ function CalculadoraFrom() {
             await analizarExpresion(display);
 
             const result = math.evaluate(display);
-            setDisplay(math.format(result, { precision: 14 }));
+            const formattedResult = math.format(result, { notation: 'fixed' });
+            setDisplay(formattedResult);
         } catch {
             setDisplay("Error");
         }
@@ -70,7 +81,7 @@ function CalculadoraFrom() {
     return (
         <div className={styles.container}>
             <div className={styles.calculadora}>
-                <div className={styles.input}>{display}</div>
+                <div className={styles.input} id="input">{display}</div>
                 <div className={styles.numbers}>
                     <div className={styles.buttonPair}>
                         <div className={styles.btn}>
@@ -223,9 +234,9 @@ function CalculadoraFrom() {
                 </div>
             </div>
             <div className={styles.analizadorLexico}>
-                <div>
+                <div className={styles.textAnalizadorLexico}>
                     <h1>Analizador Léxico</h1>
-                    <ul>
+                    <ul className={styles.containerTextLexico}>
                         {analisis.map((token, index) => (
                             <li key={index}>
                                 Linea {token.linea} - Data type: {token.tipo}, Value: "{token.valor}", Position: {token.posicion}
