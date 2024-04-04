@@ -193,6 +193,7 @@ body {
 
 .containerTextLexico {
     display: flex;
+    text-align: center;
     flex-direction: column;
     align-items: start;
     gap: 1.5em;
@@ -202,7 +203,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     text-align: center;
     gap: 1.5em;
     padding: 3rem;

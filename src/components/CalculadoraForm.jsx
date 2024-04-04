@@ -119,6 +119,48 @@ function CalculadoraFrom() {
         return `M${startX},${startY} L${endX},${endY}`;
     };
 
+    const nodeSize = { x: 90, y: 90 };
+
+    const renderNode = ({ nodeDatum, toggleNode }, size, className) => (
+        <g>
+            <circle
+                className={className}
+                r={size.x / 2}
+                cx={0}
+                cy={0}
+                fill="lightsteelblue"
+                stroke="black"
+                strokeWidth={2}
+            />
+            <text
+                fill="black"
+                textAnchor="middle"
+                x={0}
+                y={5}
+                style={{ fontSize: "1.5em" }}
+            >
+                {nodeDatum.name}
+            </text>
+        </g>
+    );
+
+    const renderLink = ({ source, target }) => {
+        const curvatura = 50;
+        const dx = target.x - source.x;
+        const dy = target.y - source.y;
+        const length = Math.sqrt(dx * dx + dy * dy);
+        const cx = source.x + dx * curvatura / length;
+        const cy = source.y + dy * curvatura / length;
+
+        return (
+            <path
+                d={`M${source.x},${source.y} Q ${cx},${cy} ${target.x},${target.y}`}
+                stroke="black"
+                strokeWidth={2}
+                fill="none"
+            />
+        );
+    };
 
     return (
         <div className={styles.container}>
@@ -288,18 +330,22 @@ function CalculadoraFrom() {
                 </div>
             </div>
             <div className={styles.arbolSintactico}>
-                    <div className={styles.textArbolSintactico}>
-                        <h1>Árbol Sintáctico</h1>
-                        <div className={styles.containerTextArbol}>
-                            {arbol && Object.keys(arbol).length > 0 &&
-                                <Tree className={styles.arbol}
-                                    data={arbol}
-                                    orientation='vertical'
-                                    pathFunc={(linkData) => customPathFunc(linkData, 'vertical')}
-                                />}
-                        </div>
+                <div className={styles.textArbolSintactico}>
+                    <h1>Árbol de Derivación</h1>
+                    <div className={styles.containerTextArbol}>
+                        {arbol && Object.keys(arbol).length > 0 &&
+                            <Tree
+                                data={arbol}
+                                orientation="vertical"
+                                pathFunc={(linkData) => customPathFunc(linkData, "vertical")}
+                                renderCustomNodeElement={(rd3tNodeProps) =>
+                                    renderNode(rd3tNodeProps, nodeSize, "node")
+                                }
+                                renderCustomLinkElement={(rd3tLinkProps) => renderLink(rd3tLinkProps)}
+                            />}
                     </div>
                 </div>
+            </div>
         </div>
     );
 }
