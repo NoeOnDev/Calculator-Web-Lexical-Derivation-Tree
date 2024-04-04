@@ -5,6 +5,7 @@ import styles from '../styles/calculadoraStyle.module.css';
 function CalculadoraFrom() {
     const [display, setDisplay] = useState("");
     const [analisis, setAnalisis] = useState([]);
+    const [isValid, setIsValid] = useState(true);
 
     const handleClick = (val) => {
         try {
@@ -18,7 +19,7 @@ function CalculadoraFrom() {
             if (val === '.' && lastNumber.includes('.') && !['+', '-', '*', '/'].includes(lastChar)) {
                 return;
             }
-            if (val === '-' && lastChar !== '-' && !['+', '*', '/'].includes(lastChar)) {
+            if (val === '-' && lastChar !== '-' && !['+', '-', '*', '/'].includes(lastChar)) {
                 setDisplay(display + val);
                 return;
             }
@@ -31,8 +32,10 @@ function CalculadoraFrom() {
                 return;
             }
             setDisplay(display + val);
+            setIsValid(true);
         } catch (error) {
-            setDisplay("Error");
+            setDisplay("Sintax Error");
+            setIsValid(false);
             console.error(error);
         }
     };
@@ -47,13 +50,16 @@ function CalculadoraFrom() {
                 throw new Error();
             }
 
-            await analizarExpresion(display);
-
             const result = math.evaluate(display);
             const formattedResult = math.format(result, { notation: 'fixed' });
             setDisplay(formattedResult);
+
+            if (isValid) {
+                await analizarExpresion(display);
+            }
         } catch {
-            setDisplay("Error");
+            setDisplay("Sintax Error");
+            setIsValid(false);
         }
     };
 

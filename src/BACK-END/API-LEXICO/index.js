@@ -11,7 +11,8 @@ app.use(bodyParser.json());
 
 let lexer = moo.compile({
     WS:      /[ \t]+/,
-    number:  /0\.[0-9]+|[1-9][0-9]*\.?[0-9]*|\.[0-9]+/,
+    float:   /0\.[0-9]+|[1-9][0-9]*\.[0-9]+|\.[0-9]+/,
+    integer: /[0-9]+/,
     plus:    '+',
     minus:   '-',
     times:   '*',
