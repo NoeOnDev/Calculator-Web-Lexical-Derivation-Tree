@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as math from 'mathjs';
 import { parse } from 'mathjs';
 import Tree from 'react-d3-tree';
-import styles from '../styles/calculadoraStyle.module.css';
+import styles from '../styles/calculatorStyle.module.css';
 
 function CalculadoraFrom() {
     const [display, setDisplay] = useState("");

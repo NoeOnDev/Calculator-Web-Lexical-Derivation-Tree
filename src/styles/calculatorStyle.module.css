@@ -1,171 +1,217 @@
 body {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .container {
-  display: flex;
-  gap: 50px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    gap: 4em;
 }
 
-.tokens {
-  font-size: 1.2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
-  gap: 10px;
-}
-
-.calculator {
-  width: 424px;
-  padding: 20px;
-  -webkit-box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
-  border-radius: 40px;
-  background-color: #616161;
+.calculadora {
+    width: 392px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    padding: 3rem;
+    background-color: #9c9c9c;
+    border-radius: 30px;
 }
 
 .input {
-  border-radius: 1px;
-  height: 60px;
-  padding-right: 15px;
-  padding-top: 10px;
-  text-align: right;
-  font-size: 2.5rem;
-  overflow-x: auto;
-  transition: all .2s ease-in-out;
-  background-color: #9CCC65;
-  border-radius: 20px;
+    border-radius: 1px;
+    height: 100px;
+    padding-right: 15px;
+    padding-top: 10px;
+    text-align: right;
+    font-size: 2.5rem;
+    overflow-x: auto;
+    transition: all .2s ease-in-out;
+    background-color: #5b721e;  
+    border-radius: 10px;
+    box-shadow: inset 8px 8px 8px #445517,
+              inset -8px -8px 8px #5e751f;
 }
 
-.operators div {
-  display: inline-block;
-  border-radius: 10px;
-  border: none;
-  width: 82px;
-  text-align: center;
-  padding: 10px;
-  margin: 20px 4px 5px 0;
-  cursor: pointer;
-  background-color: #BDBDBD;
-  transition: border-color .2s ease-in-out, background-color .2s, box-shadow .2s;
+.numbers {
+    user-select: none;
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+    gap: 1.5em;
 }
 
-.operators div:hover {
-  background-color: #ddd;
-  -webkit-box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
-  border-color: #aaa;
+.buttons {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.5em;
 }
 
-.operators div:active {
-  font-weight: bold;
+.buttonPair {
+    display: flex;
+    column-gap: 1.5em;
 }
 
-.leftPanel {
-  display: inline-block;
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 5em;
+    height: 5em;
+    background-color: #171717;
+    border-radius: 5px;
 }
 
-.numbers div,
-.operators div,
-.equal,
-.clear,
-.delete {
-  user-select: none;
+.button {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 5.7em;
+    height: 5.7em;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background-color: #c7c3c0;
+    box-shadow: rgba(0, 0, 0, 0.377) 10px 10px 8px,
+        #ffffff 1.5px 1.5px 2px 0px inset, #c7c3c0 -3.2px -3.2px 8px 0px inset;
+    cursor: pointer;
+    font-family: Montserrat;
+    transition: 0.1s ease-in-out;
 }
 
-.numbers div {
-  display: inline-block;
-  border-radius: 10px;
-  border: none;
-  width: 80px;
-  text-align: center;
-  padding: 10px;
-  margin: 4px 6px 4px 0;
-  cursor: pointer;
-  background-color: #E0E0E0;
-  transition: border-color .2s ease-in-out, background-color .2s, box-shadow .2s;
+.buttonOperator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 5.7em;
+    height: 5.7em;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background-color: #545251;
+    box-shadow: rgba(0, 0, 0, 0.377) 10px 10px 8px,
+        #a8a6a4 1.5px 1.5px 1px 0px inset, #545251 -3.2px -3.2px 8px 0px inset;
+    cursor: pointer;
+    font-family: Montserrat;
+    transition: 0.1s ease-in-out;
 }
 
-.numbers div:hover {
-  background-color: #f1f1f1;
-  -webkit-box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
-  border-color: #bbb;
+.buttonDelete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 5.7em;
+    height: 5.7em;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background-color: #d42a02;
+    box-shadow: rgba(0, 0, 0, 0.377) 10px 10px 8px, #fb702c 2px 2px 10px 0px inset,
+        #d42a02 -4px -4px 1px 0px inset;
+    cursor: pointer;
+    font-family: Montserrat;
+    transition: 0.1s ease-in-out;
 }
 
-.numbers div:active {
-  font-weight: bold;
+.buttonText {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #5f5f5f;
+    fill: #5f5f5f;
+    align-items: center;
+    justify-content: center;
+    transition: 0.1s ease-in-out;
 }
 
-div.equal {
-  display: inline-block;
-  width: 80px;
-  border-radius: 10px;
-  padding: 10px;
-  text-align: center;
-  cursor: pointer;
-  border: none;
-  color: #FFF;
-  background-color: #4d90fe;
-  transition: all .2s ease-in-out;
+.buttonTextOperator {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #fff;
+    fill: #5f5f5f;
+    align-items: center;
+    justify-content: center;
+    transition: 0.1s ease-in-out;
 }
 
-div.equal:hover {
-  background-color: #307CF9;
-  -webkit-box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
+.buttonTextDelete {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #fff;
+    fill: #5f5f5f;
+    align-items: center;
+    justify-content: center;
+    transition: 0.1s ease-in-out;
 }
 
-div.equal:active {
-  font-weight: bold;
+.button:active {
+    box-shadow: rgba(0, 0, 0, 0.377) 0px 0px 0px, inset 0.5px 0.5px 4px #000000,
+        #c7c3c0 -3.2px -3.2px 8px 0px inset;
 }
 
-div.clear {
-  display: inline-block;
-  border-radius: 10px;
-  border: none;
-  padding: 10px;
-  text-align: center;
-  cursor: pointer;
-  color: #FFF;
-  background-color: #7f8185;
-  transition: all .2s ease-in-out;
+.button:active .buttonText {
+    scale: 0.95;
 }
 
-div.clear:hover {
-  background-color: #4d4f52;
-  -webkit-box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
+.buttonOperator:active {
+    box-shadow: rgba(0, 0, 0, 0.377) 0px 0px 0px, inset 0.5px 0.5px 4px #000000,
+        #545251 -3.2px -3.2px 8px 0px inset;
 }
 
-div.clear:active {
-  font-weight: bold;
+.buttonOperator:active .buttonText {
+    transform: translateY(0.5px);
 }
 
-div.delete {
-  border-radius: 10px;
-  text-align: center;
-  cursor: pointer;
-  padding: 10px;
-  color: #FFF;
-  background-color: #FF5252;
-  transition: all .2s ease-in-out;
-  border: none;
+.buttonDelete:active {
+    box-shadow: rgba(0, 0, 0, 0.377) 0px 0px 0px, inset 0.5px 0.5px 4px #000000,
+        #545251 -3.2px -3.2px 8px 0px inset;
 }
 
-div.delete:hover {
-  background-color: #bb0000;
-  -webkit-box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
+.buttonDelete:active .button_text {
+    transform: translateY(0.5px);
 }
 
-div.delete:active {
-  font-weight: bold;
+.analizadorLexico {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5em;
+    padding: 3rem;
+    background-color: #9c9c9c;
+    border-radius: 10px;
+    min-width: 450px;
+}
+
+.textAnalizadorLexico {
+    font-weight: 700;
+    color: #3d3d3d;
+}
+
+.containerTextLexico {
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.5em;
+}
+
+.arbolSintactico {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5em;
+    padding: 3rem;
+    background-color: #9c9c9c;
+    border-radius: 10px;
+    min-width: 450px;
+}
+
+.containerTextArbol {
+    width: 600px;
+    height: 500px;
 }
