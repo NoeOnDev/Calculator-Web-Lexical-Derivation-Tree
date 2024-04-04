@@ -5,7 +5,6 @@ import styles from '../styles/calculadoraStyle.module.css';
 function CalculadoraFrom() {
     const [display, setDisplay] = useState("");
     const [analisis, setAnalisis] = useState([]);
-    const [tree, setTree] = useState([]);
     const [isValid, setIsValid] = useState(true);
 
     const handleClick = (val) => {
@@ -54,10 +53,9 @@ function CalculadoraFrom() {
             const result = math.evaluate(display);
             const formattedResult = math.format(result, { notation: 'fixed' });
             setDisplay(formattedResult);
-            
+
             if (isValid) {
                 await analizarExpresion(display);
-                await analizarSintaxis(display);
             }
         } catch {
             setDisplay("Sintax Error");
@@ -85,19 +83,6 @@ function CalculadoraFrom() {
 
         const data = await response.json();
         setAnalisis(data.resultado);
-    }
-
-    const analizarSintaxis = async (expresion) => {
-        const response = await fetch('http://localhost:3001/analizador/sintactico', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ expresion })
-        });
-    
-        const data = await response.json();
-        setTree(data.arbol);
     }
 
     return (
