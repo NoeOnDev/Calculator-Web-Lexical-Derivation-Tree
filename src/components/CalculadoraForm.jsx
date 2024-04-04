@@ -65,6 +65,7 @@ function CalculadoraFrom() {
 
     const clearDisplay = () => {
         setDisplay("");
+        setAnalisis([]);
     };
 
     const deleteLastChar = () => {
