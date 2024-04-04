@@ -32,8 +32,22 @@ app.post("/analizador/lexico", (req, res) => {
     let token;
     let resultado = [];
     let linea = 1;
+    let prevToken = null;
     while ((token = lexer.next())) {
       if (token.type !== "NL" && token.type !== "WS") {
+        if (
+          prevToken &&
+          (prevToken.type === "integer" || prevToken.type === "rparen") &&
+          (token.type === "integer" || token.type === "lparen")
+        ) {
+          resultado.push({
+            linea,
+            tipo: "times",
+            valor: "*",
+            posicion: token.col - 1,
+          });
+          token.col++;
+        }
         resultado.push({
           linea,
           tipo: token.type,
@@ -44,6 +58,7 @@ app.post("/analizador/lexico", (req, res) => {
       if (token.type === "NL") {
         linea++;
       }
+      prevToken = token;
     }
 
     res.send({ resultado });
