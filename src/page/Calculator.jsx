@@ -1,9 +1,9 @@
-import CalculadoraFrom from "../components/CalculatorForm";
+import CalculatorForm from "../components/CalculatorForm";
 
-function Calculadora() {
+function Calculator() {
     return (
-        <CalculadoraFrom />
+        <CalculatorForm />
     );
 }
 
-export default Calculadora;
+export default Calculator;

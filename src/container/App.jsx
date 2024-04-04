@@ -1,11 +1,11 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Calculadora from "../page/Calculator";
+import Calculator from "../page/Calculator";
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Calculadora />} />
+                <Route path="/" element={<Calculator />} />
             </Routes>
         </BrowserRouter>
     );

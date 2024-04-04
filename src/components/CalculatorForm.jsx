@@ -4,7 +4,7 @@ import { parse } from 'mathjs';
 import Tree from 'react-d3-tree';
 import styles from '../styles/calculatorStyle.module.css';
 
-function CalculadoraFrom() {
+function CalculatorForm() {
     const [display, setDisplay] = useState("");
     const [analisis, setAnalisis] = useState([]);
     const [arbol, setArbol] = useState([]);
@@ -354,4 +354,4 @@ function CalculadoraFrom() {
     );
 }
 
-export default CalculadoraFrom;
+export default CalculatorForm;
