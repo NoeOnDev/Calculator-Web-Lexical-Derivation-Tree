@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Calculadora from "../page/Calculadora";
+import Calculadora from "../page/Calculator";
 
 function App() {
     return (

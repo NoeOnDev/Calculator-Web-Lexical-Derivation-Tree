@@ -1,4 +1,4 @@
-import CalculadoraFrom from "../components/CalculadoraForm";
+import CalculadoraFrom from "../components/CalculatorForm";
 
 function Calculadora() {
     return (
