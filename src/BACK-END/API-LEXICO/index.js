@@ -1,12 +1,16 @@
 import express from 'express';
 import cors from 'cors';
+import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import moo from 'moo';
+import nearley from 'nearley';
+
 
 const app = express();
 const PORT = 3001;
 
 app.use(cors());
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 
 let lexer = moo.compile({
