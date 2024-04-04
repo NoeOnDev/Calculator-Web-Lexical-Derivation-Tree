@@ -196,7 +196,7 @@ body {
     text-align: center;
     flex-direction: column;
     align-items: start;
-    gap: 1.5em;
+    gap: 0.5em;
 }
 
 .arbolSintactico {

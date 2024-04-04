@@ -94,19 +94,18 @@ function CalculadoraFrom() {
     }
 
     const transformarArbol = (nodo) => {
-        return {
-            name: nodo.op || nodo.fn || nodo.name || nodo.value,
-            children: nodo.args ? nodo.args.map(transformarArbol) : [],
-        };
+        if (nodo.content) {
+            return transformarArbol(nodo.content);
+        } else {
+            return {
+                name: nodo.op || nodo.fn || nodo.name || nodo.value,
+                children: nodo.args ? nodo.args.map(transformarArbol) : [],
+            };
+        }
     };
 
     const generarArbol = (expresion) => {
-        let expresionConMultiplicacion = expresion.replace(/(\d)\(/g, '$1*(');
-        expresionConMultiplicacion = expresionConMultiplicacion.replace(/\)(\d)/g, ')*$1');
-    
-        const expresionSinParentesis = expresionConMultiplicacion.replace(/\(([^()]+)\)/g, '$1');
-    
-        const nodo = parse(expresionSinParentesis);
+        const nodo = parse(expresion);
         const arbolMathjs = nodo.toJSON();
         const arbolD3 = transformarArbol(arbolMathjs);
         setArbol(arbolD3);
