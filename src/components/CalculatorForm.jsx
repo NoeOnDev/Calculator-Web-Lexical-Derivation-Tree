@@ -10,6 +10,16 @@ function CalculatorForm() {
     const [arbol, setArbol] = useState([]);
     const [isValid, setIsValid] = useState(true);
 
+    const clearDisplay = () => {
+        setDisplay("");
+        setAnalisis([]);
+        setArbol([]);
+    };
+
+    const deleteLastChar = () => {
+        setDisplay(display.slice(0, -1));
+    };
+
     const handleClick = (val) => {
         try {
             const lastNumber = display.split(/[\+\-\*\/\(]/).slice(-1)[0];
@@ -69,15 +79,6 @@ function CalculatorForm() {
             setDisplay("Sintax Error");
             setIsValid(false);
         }
-    };
-
-    const clearDisplay = () => {
-        setDisplay("");
-        setAnalisis([]);
-    };
-
-    const deleteLastChar = () => {
-        setDisplay(display.slice(0, -1));
     };
 
     const analizarExpresion = async (expresion) => {
