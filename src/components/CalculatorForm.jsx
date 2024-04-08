@@ -59,18 +59,22 @@ function CalculatorForm() {
 
     const calculate = async () => {
         try {
+            if (!display.trim()) {
+                return;
+            }
+    
             if ((display.match(/\(/g) || []).length !== (display.match(/\)/g) || []).length) {
                 throw new Error();
             }
-
+    
             if (/\/0/.test(display)) {
                 throw new Error();
             }
-
+    
             const result = math.evaluate(display);
             const formattedResult = math.format(result, { notation: 'fixed' });
             setDisplay(formattedResult);
-
+    
             if (isValid) {
                 await analizarExpresion(display);
                 generarArbol(display);
