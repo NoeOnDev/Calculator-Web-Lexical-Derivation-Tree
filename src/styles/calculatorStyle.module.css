@@ -184,6 +184,8 @@ body {
     background-color: #9c9c9c;
     border-radius: 10px;
     min-width: 450px;
+    height: 580px;
+    overflow: auto;
 }
 
 .textAnalizadorLexico {
