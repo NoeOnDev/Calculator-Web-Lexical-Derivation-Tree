@@ -51,6 +51,10 @@ Este proyecto es una calculadora web que no solo resuelve expresiones matemátic
 1. Ingresa una expresión matemática en la calculadora web.
 2. Observa la resolución de la expresión, el análisis léxico y el árbol de derivación generados.
 
+## Video de la funcionalidad
+
+    [![Video de la funcionalidad](http://img.youtube.com/vi/aprFcil9deY/0.jpg)](http://www.youtube.com/watch?v=aprFcil9deY "Video de la funcionalidad")
+
 ## Capturas de pantalla
 
 Aquí hay algunas capturas de pantalla de la aplicación en funcionamiento:
