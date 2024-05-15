@@ -53,7 +53,7 @@ Este proyecto es una calculadora web que no solo resuelve expresiones matemátic
 
 ## Video de la funcionalidad
 
-    [![Video de la funcionalidad](http://img.youtube.com/vi/aprFcil9deY/0.jpg)](http://www.youtube.com/watch?v=aprFcil9deY "Video de la funcionalidad")
+[![Video de la funcionalidad](http://img.youtube.com/vi/aprFcil9deY/0.jpg)](http://www.youtube.com/watch?v=aprFcil9deY "Video de la funcionalidad")
 
 ## Capturas de pantalla
 
